@@ -36,6 +36,27 @@ app.get("/", async (c) => {
   return c.html(response);
 });
 
+app.get("/user/register", async (c) => {
+    const registerForm = templates.USER_REGISTER_FORM_VIEW();
+
+    const response = templates.HTML(registerForm);
+
+    return c.html(response);
+});
+
+app.post("/user/register", async (c) => {
+    const body = await c.req.parseBody();
+    const now = new Date().toISOString();
+
+    const userID = await new Promise((resolve) => {
+        db.run(queries.Users.create, body.name, body.email, now, function(err) {
+            resolve(this.lastID);
+        });
+    });
+
+    return c.redirect(`/user/${userID}`);
+});
+
 app.use("/static/*", serveStatic({ root: "./" }));
 
 serve(app);
