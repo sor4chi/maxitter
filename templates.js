@@ -42,9 +42,25 @@ const USER_TWEET_LIST_VIEW = (user, tweets) => `
 </div>
 `;
 
+const TWEET_FORM_VIEW = (users) => `
+<h1 class="title">ツイート</h1>
+<form action="/tweet" method="POST">
+    <label for="content">内容</label>
+    <textarea name="content" id="content" rows="10"></textarea>
+    <label for="user_id">ユーザー</label>
+    <select name="user_id" id="user_id">
+        ${users
+          .map((user) => `<option value="${user.id}">${user.name}</option>`)
+          .join("\n")}
+    </select>
+    <button type="submit">投稿</button>
+</form>
+`;
+
 module.exports = {
     HTML,
     TWEET_LIST_VIEW,
     USER_REGISTER_FORM_VIEW,
     USER_TWEET_LIST_VIEW,
+    TWEET_FORM_VIEW,
 };
