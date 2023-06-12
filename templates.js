@@ -33,8 +33,18 @@ const USER_REGISTER_FORM_VIEW = () => `
 </form>
 `;
 
+const USER_TWEET_LIST_VIEW = (user, tweets) => `
+<h1 class="title">${user.name}さんのツイート一覧</h1>
+<div class="tweet-list">
+    ${tweets
+      .map((tweet) => `<div class="tweet">${tweet.content}</div>`)
+      .join("\n")}
+</div>
+`;
+
 module.exports = {
-  HTML,
-  TWEET_LIST_VIEW,
-  USER_REGISTER_FORM_VIEW,
+    HTML,
+    TWEET_LIST_VIEW,
+    USER_REGISTER_FORM_VIEW,
+    USER_TWEET_LIST_VIEW,
 };

@@ -9,6 +9,7 @@ const Tweets = {
   `,
   create: `INSERT INTO tweets (content, user_id, created_at) VALUES (?, ?, ?);`,
   findAll: `SELECT * FROM tweets;`,
+  findByUserId: `SELECT * FROM tweets WHERE user_id = ?;`,
 };
 
 const Users = {
@@ -22,6 +23,7 @@ const Users = {
   `,
   create: `INSERT INTO users (name, email, created_at) VALUES (?, ?, ?);`,
   findAll: `SELECT * FROM users;`,
+  findById: `SELECT * FROM users WHERE id = ?;`,
   findByTweetId: `SELECT * FROM users WHERE id = (SELECT user_id FROM tweets WHERE id = ?);`,
 };
 

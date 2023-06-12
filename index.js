@@ -57,6 +57,32 @@ app.post("/user/register", async (c) => {
     return c.redirect(`/user/${userID}`);
 });
 
+app.get("/user/:id", async (c) => {
+    const userId = c.req.param("id");
+
+    const user = await new Promise((resolve) => {
+        db.get(queries.Users.findById, userId, (err, row) => {
+            resolve(row);
+        });
+    });
+
+    if (!user) {
+        return c.notFound();
+    }
+
+    const tweets = await new Promise((resolve) => {
+        db.all(queries.Tweets.findByUserId, userId, (err, rows) => {
+            resolve(rows);
+        });
+    });
+
+    const userTweetList = templates.USER_TWEET_LIST_VIEW(user, tweets);
+
+    const response = templates.HTML(userTweetList);
+
+    return c.html(response);
+});
+
 app.use("/static/*", serveStatic({ root: "./" }));
 
 serve(app);
