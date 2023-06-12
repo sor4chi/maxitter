@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const queries = require("./queries");
+const templates = require("./templates");
 const { serve } = require("@hono/node-server");
 const { serveStatic } = require("@hono/node-server/serve-static");
 const { Hono } = require("hono");
@@ -19,21 +20,6 @@ db.serialize(() => {
     db.run(queries.Tweets.create, '今年こそは痩せるぞ！', 1, '2023-01-01 00:00:02');
 });
 
-const HTML = (body) => `
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>これはただの文字列です</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    ${body}
-</body>
-</html>
-`;
-
 const app = new Hono();
 
 app.get("/", async (c) => {
@@ -43,14 +29,9 @@ app.get("/", async (c) => {
       });
   });
 
-  const tweetList = tweets.map((tweet) => `<div class="tweet">${tweet.content}</div>`).join("\n");
+  const tweetList = templates.TWEET_LIST_VIEW(tweets);
 
-  const response = HTML(`
-      <h1 class="title">ツイート一覧</h1>
-      <div class="tweet-list">
-          ${tweetList}
-      </div>
-  `);
+  const response = templates.HTML(tweetList);
 
   return c.html(response);
 });
